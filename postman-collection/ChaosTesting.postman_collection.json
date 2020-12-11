@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "ff9e356c-aa78-4199-a689-eb5615bc6dca",
+		"name": "ChaosTesting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Player Rankings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "47c28f0e-0cc2-46d7-85fc-fe97dedb186d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/player/all"
+			},
+			"response": []
+		},
+		{
+			"name": "Enable Chaosmonkey",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/actuator/chaosmonkey/enable"
+			},
+			"response": []
+		},
+		{
+			"name": "Set Watchers",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"controller\": false,\n  \"restController\": false,\n  \"service\": false,\n  \"repository\": true,\n  \"component\": false\n}"
+				},
+				"url": "http://localhost:8080/actuator/chaosmonkey/watchers"
+			},
+			"response": []
+		},
+		{
+			"name": "Inject Fault",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"level\": 1,\n\t\"latencyActive\": false,\n\t\"exceptionsActive\": true,\n\t\"exception\": {\n\t\t\"type\": \"java.net.ConnectException\",\n\t\t\t\"arguments\": [\n                {\n                  \"className\": \"java.lang.String\",\n                  \"value\": \"Connection timed out\"\n                }\n              ]\n            }\n}"
+				},
+				"url": "http://localhost:8080/actuator/chaosmonkey/assaults"
+			},
+			"response": []
+		},
+		{
+			"name": "Disable Chaosmonkey",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/actuator/chaosmonkey/disable"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
